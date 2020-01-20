@@ -1,10 +1,12 @@
 import Dominion
+import random
+from collections import defaultdict
+
 
 def setupBox(nV):
     # Define box
     box = {}
-
-    # fill box with cards
+    # Fill box with cards
     box["Woodcutter"] = [Dominion.Woodcutter()] * 10
     box["Smithy"] = [Dominion.Smithy()] * 10
     box["Laboratory"] = [Dominion.Laboratory()] * 10
@@ -30,22 +32,28 @@ def setupBox(nV):
     box["Spy"] = [Dominion.Spy()] * 10
     box["Thief"] = [Dominion.Thief()] * 10
     box["Throne Room"] = [Dominion.Throne_Room()] * 10
-
     # return box of cards for play
     return box
 
 
-def defaultSupply(supply, numP, nV, nC):
-    supply["Copper"]=[Dominion.Copper()]*(60-numP*7)
-    supply["Silver"]=[Dominion.Silver()]*40
-    supply["Gold"]=[Dominion.Gold()]*30
-    supply["Estate"]=[Dominion.Estate()]*nV
-    supply["Duchy"]=[Dominion.Duchy()]*nV
-    supply["Province"]=[Dominion.Province()]*nV
-    supply["Curse"]=[Dominion.Curse()]*nC
+def setupSupply(box, numP, nV, nC):
+    # Pick 10 cards from box to be in the supply.
+    boxlist = [k for k in box]
+    random.shuffle(boxlist)
+    random10 = boxlist[:10]
+    supply = defaultdict(list, [(k, box[k]) for k in random10])
+    # Add the default supply cards available in every game.
+    supply["Copper"] = [Dominion.Copper()] * (60 - numP * 7)
+    supply["Silver"] = [Dominion.Silver()] * 40
+    supply["Gold"] = [Dominion.Gold()] * 30
+    supply["Estate"] = [Dominion.Estate()] * nV
+    supply["Duchy"] = [Dominion.Duchy()] * nV
+    supply["Province"] = [Dominion.Province()] * nV
+    supply["Curse"] = [Dominion.Curse()] * nC
     return supply
 
-def setupPlayer(player_names):
+
+def setupPlayers(player_names):
     # Construct the Player objects
     players = []
     for name in player_names:
@@ -55,5 +63,4 @@ def setupPlayer(player_names):
             players.append(Dominion.TablePlayer(name[1:]))
         else:
             players.append(Dominion.Player(name))
-
     return players

@@ -6,8 +6,6 @@ Created on Tue Oct 13 15:42:42 2015
 """
 
 import Dominion
-import random
-from collections import defaultdict
 import testUtility
 
 # Get player names
@@ -32,20 +30,14 @@ supply_order = {0: ['Curse', 'Copper'],
                 6: ['Gold', 'Adventurer'],
                 8: ['Province']}
 
-# Pick 10 cards from box to be in the supply.
-boxlist = [k for k in box]
-random.shuffle(boxlist)
-random10 = boxlist[:10]
-supply = defaultdict(list, [(k, box[k]) for k in random10])
-
-# The supply always has these cards
-supply = testUtility.defaultSupply(supply, len(player_names), nV, nC)
+# Create the supply of cards for the current game
+supply = testUtility.setupSupply(box, len(player_names), nV, nC)
 
 # initialize the trash
 trash = []
 
 # Create the player objects
-players = testUtility.setupPlayer(player_names)
+players = testUtility.setupPlayers(player_names)
 
 # Play the game
 turn = 0
